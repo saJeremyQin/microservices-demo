@@ -450,6 +450,11 @@ func (fe *frontendServer) getProductByID(w http.ResponseWriter, r *http.Request)
 
 func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+	if !assistantEnabled || fe.shoppingAssistantSvcAddr == "" {
+		renderHTTPError(log, r, w, errors.New("shopping assistant unavailable"), http.StatusServiceUnavailable)
+		return
+	}
+
 	type Response struct {
 		Message string `json:"message"`
 	}

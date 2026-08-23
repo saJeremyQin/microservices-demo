@@ -136,7 +136,9 @@ func main() {
 	mustMapEnv(&svc.checkoutSvcAddr, "CHECKOUT_SERVICE_ADDR")
 	mustMapEnv(&svc.shippingSvcAddr, "SHIPPING_SERVICE_ADDR")
 	mustMapEnv(&svc.adSvcAddr, "AD_SERVICE_ADDR")
-	mustMapEnv(&svc.shoppingAssistantSvcAddr, "SHOPPING_ASSISTANT_SERVICE_ADDR")
+	if os.Getenv("ENABLE_ASSISTANT") == "true" {
+		mustMapEnv(&svc.shoppingAssistantSvcAddr, "SHOPPING_ASSISTANT_SERVICE_ADDR")
+	}
 
 	mustConnGRPC(ctx, &svc.currencySvcConn, svc.currencySvcAddr)
 	mustConnGRPC(ctx, &svc.productCatalogSvcConn, svc.productCatalogSvcAddr)
